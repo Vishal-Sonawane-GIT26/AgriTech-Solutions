@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agritech Solutions - Login</title>
+    
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" href="css/login.css">
+    
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+
+    <!-- Favicon -->
+    <link rel="icon" href="image/favicon.PNG">
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
+
+    <script>
+        // Your Firebase configuration
+        var firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+    </script>
+</head>
+<body>
+    <div class="form-container">
+        <div id="loginForm" class="form-content">
+            <form id="login-form" onsubmit="login(event)">
+                <h2>Login</h2>
+                <div class="input-group">
+                    <i class="fa fa-user"></i>
+                    <input type="text" id="login-email" placeholder="Email" required>
+                </div>
+                <div class="input-group">
+                    <i class="fa fa-lock"></i>
+                    <input type="password" id="login-password" placeholder="Password" required>
+                </div>
+                <button type="submit" class="form-btn">Login</button>
+                <div class="forgot-password">
+                    <a href="#">Forgot Password?</a>
+                </div>
+                <div class="toggle-link">
+                    Don't have an account? <a href="#" onclick="showSignup()">Sign up</a>
+                </div>
+            </form>
+        </div>
+        <div id="signupForm" class="form-content" style="display: none;">
+            <form id="signup-form" onsubmit="signup(event)">
+                <h2>Sign Up</h2>
+                <div class="input-group">
+                    <i class="fa fa-envelope"></i>
+                    <input type="email" id="signup-email" placeholder="Email" required>
+                </div>
+                <div class="input-group">
+                    <i class="fa fa-lock"></i>
+                    <input type="password" id="signup-password" placeholder="Password" required>
+                </div>
+                <button type="submit" class="form-btn">Sign Up</button>
+                <div class="toggle-link">
+                    Already have an account? <a href="#" onclick="showLogin()">Login</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function showLogin() {
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('signupForm').style.display = 'none';
+        }
+
+        function showSignup() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('signupForm').style.display = 'block';
+        }
+
+        function login(event) {
+            event.preventDefault();
+            var email = document.getElementById('login-email').value;
+            var password = document.getElementById('login-password').value;
+
+            firebase.auth().signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // Signed in
+                    var user = userCredential.user;
+                    console.log("Login successful", user);
+                    // Redirect to another page or show a success message
+                })
+                .catch((error) => {
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                    console.error("Error logging in", errorCode, errorMessage);
+                });
+        }
+
+        function signup(event) {
+            event.preventDefault();
+            var email = document.getElementById('signup-email').value;
+            var password = document.getElementById('signup-password').value;
+
+            firebase.auth().createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // Signed up
+                    var user = userCredential.user;
+                    console.log("Signup successful", user);
+                    // Redirect to another page or show a success message
+                })
+                .catch((error) => {
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                    console.error("Error signing up", errorCode, errorMessage);
+                });
+        }
+    </script>
+</body>
+</html>
